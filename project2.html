@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.8/d3.min.js" type="text/JavaScript"></script>
+</head>
+<body>
+<div id="viz">
+    <svg style="height:800px;width:1000;border:1px solid grey"></svg>
+</div>
+<script>
+    d3.json("/data/company.json",data => viz(data));
+    function viz(data)
+{
+   
+
+    var depthscale=d3.scaleOrdinal().range(["#75739F","#41A368","#FE9922","blue"]); //convert data into nested data
+     var nestedData=d3.nest()
+     .key(d=> d.role)
+     .entries(data.Employee);
+
+     var packableData={id:"Employeelist",values:nestedData};
+    
+     //pass data to d3.hierarchy
+
+    var treechart=d3.tree();
+    
+    treechart.size([1000,600]);
+    var root=d3.hierarchy(packableData, d=> d.values);
+
+    var treedata=treechart(root).descendants();
+    console.log(treedata);
+
+    d3.select("svg")
+    .append("g")
+    .attr("id","treeG")
+    .attr("transform","translate(60,20)")
+    .selectAll("g")
+    .data(treedata)
+    .enter()
+    .append("g")
+       .attr("class","node")
+       .attr("transform",d=>`translate(${d.y},${d.x})`);
+
+     
+    d3.selectAll("g.node")
+    .append("circle")
+    .attr("r",2 * treedata.length+5)
+    .style("fill", d => depthscale(d.depth))
+    .style("stroke","white")
+    .style("stroke-width","2px");
+
+    d3.selectAll("g.node")
+     .append("text")
+    .style("text-anchor","middle")
+     .style("fill","black")
+     .text(d=> d.data.id||d.data.key||d.data.name);
+
+//give connection lines
+     d3.select("#treeG").selectAll("line")
+    .data(treedata.filter(d=>d.parent))
+    .enter()
+    .insert("line","g")
+    .attr("x1",d=>d.parent.y)
+    .attr("y1",d=>d.parent.x)
+    .attr("x2",d=>d.y)
+    .attr("y2",d=>d.x)
+    .style("stroke","#Be4f25");
+//zoom 
+     treezoom=d3.zoom();
+    treezoom.on("zoom",zoomed);
+    d3.select("svg").call(treezoom);
+
+    function zoomed()
+    {
+        d3.select("#treeG").attr("transform",`translate(${d3.event.transform.x},${d3.event.transform.y})`);
+
+    }
+    
+
+}
+
+
+
+
+    </script>
+</body>
+</html>

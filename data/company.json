@@ -1,0 +1,21 @@
+{
+    "Employee": [
+    {"role": "manager", "name": "Irene"},
+    {"role": "manager", "name": "Zan"},
+    {"role": "employee", "name": "Jim"},
+    {"role": "employee", "name": "Susie"},
+    {"role": "employee", "name": "Kai"},
+    {"role": "employee", "name": "Shirley"},
+    {"role": "employee", "name": "Erik"},
+    {"role": "employee", "name": "Shelby"},
+    {"role": "employee", "name": "Tony"},
+    {"role": "employee", "name": "Fil"},
+    {"role": "employee", "name": "Adam"},
+    {"role": "employee", "name": "Ian"},
+    {"role": "employee", "name": "Miles"},
+    {"role": "employee", "name": "Sarah"},
+    {"role": "contractor", "name": "Nadieh"},
+    {"role": "contractor", "name": "Hajra"}
+    
+    ]
+    }
